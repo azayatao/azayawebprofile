@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azaya</title>
+<meta name="description" content="Azaya: the quiet architect behind the stage. Builder, Roblox dev, bot dev, Mobile Legends player.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,800;1,700&family=Cinzel:wght@500;700&family=Rajdhani:wght@500;700&family=Syne:wght@600;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Permanent accent color for everyone: change --red */
+:root{--display:'Bodoni Moda',serif;--body:'Hanken Grotesk',sans-serif;--mono:'IBM Plex Mono',monospace;--red:#e11d2e;--red-hi:color-mix(in srgb,var(--red),white 25%);--red-soft:color-mix(in srgb,var(--red),white 45%);--red-dark:color-mix(in srgb,var(--red),black 45%);--line:color-mix(in srgb,var(--red),black 78%);--ink:#f4eaea;--muted:#b49b9e;--panel:rgba(20,8,11,.8)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#050203;color:var(--ink);font-family:var(--body);line-height:1.5}
+a{color:var(--muted);text-decoration:none}a:hover{color:var(--red-hi)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+
+/* Corridor background: lines rush toward you, a door glows at the end */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#050203}
+.bg>div{position:absolute;left:-50%;width:200%;height:55%;--g:color-mix(in srgb,var(--red),transparent 72%);background:repeating-linear-gradient(0deg,var(--g) 0 2px,transparent 2px 70px),repeating-linear-gradient(90deg,var(--g) 0 2px,transparent 2px 110px);animation:rush 3.5s linear infinite}
+.floor{bottom:0;transform-origin:top;transform:perspective(500px) rotateX(62deg);mask-image:linear-gradient(to top,#000 15%,transparent 95%)}
+.ceil{top:0;transform-origin:bottom;transform:perspective(500px) rotateX(-62deg);animation-direction:reverse!important;mask-image:linear-gradient(to bottom,#000 15%,transparent 95%)}
+@keyframes rush{to{background-position:0 70px,0 0}}
+.door{position:absolute;top:50%;left:50%;width:34vmin;height:34vmin;translate:-50% -50%;border-radius:50%;background:radial-gradient(circle,var(--red-hi),transparent 70%);filter:blur(30px);opacity:.4;animation:pulse 6s ease-in-out infinite alternate}
+.orb{position:absolute;top:50%;left:50%;width:60vmax;height:60vmax;margin:-30vmax 0 0 -30vmax;border-radius:50%;background:radial-gradient(circle,var(--red-dark),transparent 65%);filter:blur(90px);opacity:.45;animation:orbit 34s linear infinite}
+@keyframes orbit{from{transform:rotate(0) translateX(22vmax) rotate(0)}to{transform:rotate(360deg) translateX(22vmax) rotate(-360deg)}}
+@keyframes pulse{to{opacity:.12;transform:scale(1.25)}}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 25%,#050203 100%)}
+
+/* Curtain opens once on load */
+.curtain{position:fixed;inset:0;z-index:50;display:flex;pointer-events:none}
+.curtain b{flex:1;background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--red),black 72%) 0,var(--red-dark) 24px,color-mix(in srgb,var(--red),black 72%) 48px);box-shadow:0 0 60px #000;animation:open 2.4s cubic-bezier(.75,0,.25,1) .5s forwards}
+.curtain b:last-child{animation-name:openR}
+@keyframes open{to{transform:translateX(-102%)}}
+@keyframes openR{to{transform:translateX(102%)}}
+
+.wrap{max-width:1120px;margin:0 auto;padding:28px 24px 64px;display:flex;flex-direction:column;gap:40px}
+nav{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.logo{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:4px;color:var(--red)}
+nav .links{display:flex;flex-wrap:wrap;gap:24px;font-size:15px}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:5px;color:var(--red-hi)}
+h2{margin:8px 0 0;font-family:var(--display);font-weight:700;font-size:42px;line-height:1.1}
+.panel,.profile,.card{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(6px)}
+.panel{padding:36px}
+
+.profile{overflow:hidden}
+.banner{position:relative;height:220px;background:linear-gradient(120deg,color-mix(in srgb,var(--red),black 75%),var(--red-dark) 55%,var(--red));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;letter-spacing:6px;color:#ffd5d9}
+.banner img,.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.profile-body{display:flex;flex-wrap:wrap;gap:32px;padding:0 36px 36px}
+.profile-main{flex:1 1 380px;display:flex;flex-direction:column;gap:14px}
+.avatar{position:relative;width:128px;height:128px;margin-top:-64px}
+.pic{position:relative;width:128px;height:128px;border-radius:50%;overflow:hidden;background:#0b0608;border:4px solid var(--red);box-shadow:0 0 0 6px #14080b;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:2px;color:var(--muted)}
+.dot{position:absolute;right:6px;bottom:6px;width:22px;height:22px;border-radius:50%;background:#3ddc84;border:4px solid #14080b}
+h1{margin:0;font-family:var(--display);font-weight:700;font-size:64px;line-height:1;letter-spacing:2px}
+.handle{margin-top:6px;font-family:var(--mono);font-size:14px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:4px 10px;border:1px solid color-mix(in srgb,var(--red),black 55%);font-family:var(--mono);font-size:12px;color:var(--red-soft)}
+.bio{font-size:17px;color:var(--muted);margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{padding:12px 24px;border:1px solid var(--red);color:var(--ink);font-family:var(--display);font-weight:700;letter-spacing:2px;transition:background .2s}
+.btn.solid{background:var(--red);color:#fff}.btn:hover{background:var(--red-hi);color:#fff}
+.code{flex:1 1 340px;align-self:flex-start;margin-top:28px;background:#0b0608;border:1px solid var(--red);padding:24px;font-family:var(--mono);font-size:14px;line-height:1.9}
+.code .c{color:var(--muted)}.code .k{color:var(--red-hi)}.code .s{color:var(--red-soft)}.code .i{padding-left:24px}
+
+.mlbb{display:flex;flex-wrap:wrap;gap:36px;align-items:center}
+.ring{position:relative;width:190px;height:190px;margin:0 auto;flex:0 0 auto}
+.ring svg{transform:rotate(-90deg);color:var(--red)}
+.num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:42px;line-height:1}
+.num small{font-size:12px;letter-spacing:3px;color:var(--muted);font-weight:500}
+.mlbb-info{flex:1 1 380px;display:flex;flex-direction:column;gap:18px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.chip{padding:10px 18px;background:#0b0608;border:1px solid var(--line)}
+.chip small{display:block;font-size:12px;letter-spacing:2px;color:var(--muted)}
+.chip b{font-family:var(--display);font-size:24px}
+.heroes{display:flex;flex-wrap:wrap;gap:10px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{position:relative;overflow:hidden;border-top:3px solid var(--red);padding:24px;display:flex;flex-direction:column;gap:10px}
+/* Spotlight follows the cursor */
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(300px circle at var(--mx,-999px) var(--my,-999px),color-mix(in srgb,var(--red),transparent 78%),transparent 70%)}
+.card h3{margin:0;font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:1px}
+.card p{margin:0;font-size:15px;color:var(--muted)}
+.card .tag{align-self:flex-start}
+.section{display:flex;flex-direction:column;gap:24px}
+.pl{display:flex;align-items:center;gap:14px}
+.pl button{width:44px;height:44px;border-radius:50%;border:1px solid var(--red);background:var(--red);color:#fff;cursor:pointer;font-size:14px}
+.eq{display:flex;align-items:flex-end;gap:3px;height:28px}
+.eq i{width:4px;height:25%;background:var(--red-hi)}
+.playing .eq i{animation:eq .7s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.15s!important}.eq i:nth-child(3){animation-delay:.3s!important}.eq i:nth-child(4){animation-delay:.1s!important}.eq i:nth-child(5){animation-delay:.25s!important}
+@keyframes eq{to{height:100%}}
+#tn{font-family:var(--mono);font-size:12px;color:var(--muted)}
+footer{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px;font-size:14px;color:var(--muted)}
+footer span{display:flex;gap:24px}
+
+/* Customize panel: only at /?edit */
+#cz{display:none;position:fixed;right:16px;bottom:16px;z-index:60;font-size:14px}
+#cz.on{display:block}
+#cz>button{padding:10px 18px;background:var(--red);color:#fff;border:0;font-family:var(--display);font-weight:700;letter-spacing:2px;cursor:pointer;float:right}
+#czbox{display:none;clear:both;width:290px;margin-bottom:8px;padding:18px;background:#0b0608;border:1px solid var(--red);flex-direction:column;gap:14px}
+#czbox.open{display:flex}
+#czbox label{display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+#czbox input[type=color]{width:100%;height:44px;border:1px solid var(--line);background:none;padding:2px;cursor:pointer}
+#czbox input[type=file]{color:var(--muted);font-size:13px}
+#czbox button{padding:8px 12px;background:none;border:1px solid var(--red);color:var(--ink);cursor:pointer}
+#czbox p{margin:0;font-size:12px;color:var(--muted)}
+
+h1{font-size:clamp(56px,10vw,112px);font-weight:800;letter-spacing:-.02em;line-height:.95}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:4px}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+.slider{position:relative;height:300px;overflow:hidden;background:#0b0608}
+.slider::after{content:"";position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,#14080b);pointer-events:none}
+.track{display:flex;height:100%;transition:transform .9s cubic-bezier(.7,0,.2,1)}
+.sl{position:relative;flex:0 0 100%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);letter-spacing:6px;color:#ffd5d9;background:linear-gradient(120deg,color-mix(in srgb,var(--red),black 75%),var(--red-dark) 55%,var(--red))}
+.sl:nth-child(2){background:linear-gradient(240deg,color-mix(in srgb,var(--red),black 70%),var(--red-dark) 60%,var(--red-hi))}
+.sl:nth-child(3){background:radial-gradient(circle at 70% 40%,var(--red),color-mix(in srgb,var(--red),black 80%))}
+.sl img,.still img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.arr{position:absolute;top:50%;translate:0 -50%;z-index:3;width:44px;height:44px;border:1px solid var(--red);background:rgba(5,2,3,.6);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.arr.l{left:16px}.arr.r{right:16px}.arr:hover{background:var(--red)}
+.dots{position:absolute;z-index:3;bottom:14px;left:36px;display:flex;gap:6px}
+.dots button{width:30px;height:20px;padding:8px 0;border:0;background:rgba(255,255,255,.35) content-box;cursor:pointer}
+.dots button.on{background:var(--red-hi) content-box}
+.hb{display:flex;flex-wrap:wrap;gap:32px;padding:0 36px 40px;align-items:flex-start}
+.hi{flex:1 1 380px;margin-top:-72px;position:relative;z-index:2;display:flex;flex-direction:column;gap:14px}
+.arch{position:relative;flex:0 0 auto;width:230px;height:290px;margin:-130px auto 0;padding:5px;border-radius:115px 115px 0 0;background:conic-gradient(from var(--a),var(--red),transparent 30%,var(--red-hi),transparent 70%,var(--red));animation:spin 7s linear infinite,bob 5s ease-in-out infinite;z-index:2}
+.arch>div{position:relative;width:100%;height:100%;border-radius:110px 110px 0 0;overflow:hidden;background:#0b0608;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;letter-spacing:2px;color:var(--muted)}
+.arch img,.arch video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.arch>div::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);transform:translateX(-120%);animation:sheen 6s ease-in-out infinite;pointer-events:none}
+@keyframes spin{to{--a:360deg}}
+@keyframes bob{50%{translate:0 -8px}}
+@keyframes sheen{40%,100%{transform:translateX(120%)}}
+.reel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+.still{position:relative;flex:0 0 240px;aspect-ratio:3/4;scroll-snap-align:start;overflow:hidden;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--muted);background:linear-gradient(160deg,color-mix(in srgb,var(--red),black 82%),#0b0608)}
+#czbox{max-height:72vh;overflow:auto}
+#czbox select{padding:8px;background:#0b0608;color:var(--ink);border:1px solid var(--line)}
+@media (max-width:560px){.slider{height:220px}.hb{padding:0 24px 32px}.dots{left:24px}.arch{margin-top:-90px}}
+@media (prefers-reduced-motion:reduce){.arch,.arch>div::after{animation:none!important}.track{transition:none}}
+@media (prefers-reduced-motion:reduce){.bg>div,.door,.orb,.playing .eq i{animation:none!important}.curtain{display:none}html{scroll-behavior:auto}}
+@media (max-width:560px){h1{font-size:48px}h2{font-size:34px}.profile-body,.panel{padding:24px}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><div class="floor"></div><div class="ceil"></div><span class="door"></span><span class="orb"></span></div>
+<div class="curtain" aria-hidden="true"><b></b><b></b></div>
+
+<div class="wrap">
+<nav>
+<div class="logo">AZAYA</div>
+<div class="links"><a href="#mlbb">Mobile Legends</a><a href="#stills">Stills</a><a href="#code">Now Showing</a><a href="#vibe">Backstage</a></div>
+</nav>
+
+<header class="profile">
+<!-- Slides: put files at assets/banner1, banner2, banner3 (.gif .png .jpg .webp). Ideal 1120x300. -->
+<div class="slider" id="slider">
+<div class="track" id="track">
+<div class="sl"><span>[SLIDE 1]</span><img alt="" style="display:none"></div>
+<div class="sl"><span>[SLIDE 2]</span><img alt="" style="display:none"></div>
+<div class="sl"><span>[SLIDE 3]</span><img alt="" style="display:none"></div>
+</div>
+<button type="button" class="arr l" id="prev" aria-label="Previous slide">&#8249;</button>
+<button type="button" class="arr r" id="next" aria-label="Next slide">&#8250;</button>
+<div class="dots"><button type="button" class="on" aria-label="Slide 1"></button><button type="button" aria-label="Slide 2"></button><button type="button" aria-label="Slide 3"></button></div>
+</div>
+<div class="hb">
+<div class="hi">
+<h1>AZAYA</h1>
+<div class="handle">@username &#183; online</div>
+<div class="tags"><span class="tag">BUILDER</span><span class="tag">ROBLOX DEV</span><span class="tag">BOT DEV</span><span class="tag">MLBB PLAYER</span></div>
+<p class="bio">The quiet architect behind the stage. I build tools, bots, and scripts for the virtual world.</p>
+<div class="btns"><a class="btn solid" href="#code">Now showing</a><a class="btn" href="#mlbb">Mobile Legends</a></div>
+</div>
+<!-- Avatar: assets/avatar.(png|gif|webp|jpg) or a moving one: assets/avatar.mp4 / avatar.webm -->
+<div class="arch"><div><span>[AVATAR]</span><img id="avImg" alt="Azaya avatar" style="display:none"><video id="avVid" autoplay muted loop playsinline style="display:none"></video></div></div>
+</div>
+</header>
+
+<section id="stills" class="section">
+<div><div class="eyebrow">GALLERY</div><h2>Stills</h2></div>
+<!-- Files: assets/still1 ... still5 (.gif .png .jpg .webp). Scroll or swipe sideways. -->
+<div class="reel">
+<div class="still"><span>[STILL 1]</span><img alt="" style="display:none"></div>
+<div class="still"><span>[STILL 2]</span><img alt="" style="display:none"></div>
+<div class="still"><span>[STILL 3]</span><img alt="" style="display:none"></div>
+<div class="still"><span>[STILL 4]</span><img alt="" style="display:none"></div>
+<div class="still"><span>[STILL 5]</span><img alt="" style="display:none"></div>
+</div>
+</section>
+
+<!-- MLBB: ring stroke-dasharray="X 503", X = win rate % x 5.03 (60% = 302) -->
+<section id="mlbb" class="panel mlbb">
+<div class="ring">
+<svg width="190" height="190" viewBox="0 0 190 190" aria-hidden="true"><circle cx="95" cy="95" r="80" fill="none" style="stroke:var(--line)" stroke-width="14"/><circle cx="95" cy="95" r="80" fill="none" stroke="currentColor" stroke-width="14" stroke-dasharray="302 503"/></svg>
+<div class="num">60%<small>WIN RATE</small></div>
+</div>
+<div class="mlbb-info">
+<div><div class="eyebrow">MOBILE LEGENDS</div><h2>Player Profile</h2></div>
+<div class="facts">
+<div class="chip"><small>HIGHEST RANK</small><b>[RANK]</b></div>
+<div class="chip"><small>TOTAL MATCHES</small><b>[0000]</b></div>
+<div class="chip"><small>MAIN ROLE</small><b>[ROLE]</b></div>
+</div>
+<div class="heroes"><span class="chip">[HERO 1] &#183; [00%]</span><span class="chip">[HERO 2] &#183; [00%]</span><span class="chip">[HERO 3] &#183; [00%]</span></div>
+</div>
+</section>
+
+<section id="code" class="section">
+<div><div class="eyebrow">PROJECTS</div><h2>Now Showing</h2></div>
+<div class="grid">
+<div class="card"><span class="tag">PYTHON</span><h3>Azaya Assistant</h3><p>A personal AI assistant for Windows with a modular four-layer architecture.</p></div>
+<div class="card"><span class="tag">DISCORD.JS V14</span><h3>Tao Bot</h3><p>An all-in-one Discord bot I made for my friends.</p></div>
+<div class="card"><span class="tag">LUA</span><h3>AzayaUI</h3><p>A GUI library for Roblox, hosted through a GitHub CDN.</p></div>
+<div class="card"><span class="tag">CHROME EXTENSION</span><h3>Azaya Finder</h3><p>A Chrome extension for looking up Roblox users and profile data.</p></div>
+<div class="card"><span class="tag">NODE &#183; RAILWAY</span><h3>Server Join Tracker</h3><p>A server-join logger that posts to Discord, running 24/7 on Railway.</p></div>
+<div class="card"><span class="tag">LUA</span><h3>Rhythm Game</h3><p>A lane-based rhythm game on Roblox with note-timing mechanics.</p></div>
+</div>
+</section>
+
+<section id="vibe" class="section">
+<div><div class="eyebrow">VIBE</div><h2>Backstage</h2></div>
+<div class="grid">
+<div class="card" id="player"><h3>Soundtrack</h3><p>Music I make myself. [ADD YOUR GENRE / DAW]</p>
+<div class="pl"><button type="button" id="play" aria-label="Play or pause">&#9654;</button><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><span id="tn">[ADD TRACK]</span></div>
+<audio id="aud" src="assets/track.mp3" preload="none"></audio></div>
+<div class="card"><h3>Roblox Maps</h3><p>Theater halls and liminal corridors, built from scratch in Roblox Studio.</p></div>
+<div class="card"><h3>Build Optimizer</h3><p>I like breaking down damage formulas and finding the most efficient builds in games.</p></div>
+</div>
+</section>
+
+<footer><span>&#169; Azaya</span><span><a href="#">Discord</a><a href="#">GitHub</a><a href="#">Instagram</a></span></footer>
+</div>
+
+<!-- Customize: open the site with /?edit. Saved on this device only. -->
+<div id="cz">
+<div id="czbox">
+<label>Accent color<input type="color" id="czColor" value="#e11d2e"></label>
+<label>Font<select id="czFont"><option value="playbill">Playbill (Bodoni Moda)</option><option value="cinzel">Roman (Cinzel)</option><option value="arcade">Arcade (Rajdhani)</option><option value="syne">Modern (Syne)</option></select></label>
+<label>Slide 1<input type="file" id="czS1" accept="image/*"></label>
+<label>Slide 2<input type="file" id="czS2" accept="image/*"></label>
+<label>Slide 3<input type="file" id="czS3" accept="image/*"></label>
+<label>Avatar (image, GIF, or video)<input type="file" id="czAvatar" accept="image/*,video/*"></label>
+<button type="button" id="czReset">Reset to default</button>
+<p>Saved on this device only. For a permanent change, edit the file in the repo.</p>
+</div>
+<button type="button" id="czToggle">CUSTOMIZE</button>
+</div>
+
+<script>
+(function(){
+var root=document.documentElement,$=function(i){return document.getElementById(i)};
+function idb(){return new Promise(function(res,rej){var r=indexedDB.open('azaya-site',1);r.onupgradeneeded=function(){r.result.createObjectStore('f')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+function put(k,v){return idb().then(function(d){return new Promise(function(res,rej){var t=d.transaction('f','readwrite'),s=t.objectStore('f');v===null?s.delete(k):s.put(v,k);t.oncomplete=res;t.onerror=function(){rej(t.error)}})})}
+function get(k){return idb().then(function(d){return new Promise(function(res,rej){var q=d.transaction('f').objectStore('f').get(k);q.onsuccess=function(){res(q.result)};q.onerror=function(){rej(q.error)}})})}
+function show(k,el){get(k).then(function(b){if(b){el.src=URL.createObjectURL(b);el.style.display=''}}).catch(function(){})}
+function color(c){c?root.style.setProperty('--red',c):root.style.removeProperty('--red')}
+
+try{var c=localStorage.getItem('azaya-accent');if(c){color(c);$('czColor').value=c}}catch(e){}
+var EX=['gif','png','jpg','webp'];
+function tryExt(el,base){var i=0;el.onload=function(){el.style.display=''};el.onerror=function(){i++;if(i<EX.length){el.src='assets/'+base+'.'+EX[i]}else{el.style.display='none'}};el.src='assets/'+base+'.'+EX[0]}
+function loadImg(el,base,key){get(key).then(function(b){if(b){el.src=URL.createObjectURL(b);el.style.display=''}else{tryExt(el,base)}}).catch(function(){tryExt(el,base)})}
+var slideImgs=document.querySelectorAll('.sl img');
+slideImgs.forEach(function(im,j){loadImg(im,'banner'+(j+1),'b'+(j+1))});
+document.querySelectorAll('.still img').forEach(function(im,j){tryExt(im,'still'+(j+1))});
+var av=$('avImg'),vid=$('avVid');
+function setAv(b){if(b.type.indexOf('video')===0){vid.onerror=null;vid.src=URL.createObjectURL(b);vid.style.display=''}else{vid.style.display='none';av.onerror=null;av.src=URL.createObjectURL(b);av.style.display=''}}
+vid.onloadeddata=function(){vid.style.display=''};
+vid.onerror=function(){if(vid.src.indexOf('.mp4')>-1){vid.src='assets/avatar.webm'}else{vid.style.display='none'}};
+get('avatar').then(function(b){if(b){setAv(b)}else{tryExt(av,'avatar');vid.src='assets/avatar.mp4'}}).catch(function(){tryExt(av,'avatar')});
+
+var FONTS={playbill:"'Bodoni Moda',serif",cinzel:"'Cinzel',serif",arcade:"'Rajdhani',sans-serif",syne:"'Syne',sans-serif"};
+function setFont(k){if(FONTS[k])root.style.setProperty('--display',FONTS[k])}
+try{var fk=localStorage.getItem('azaya-font');if(fk){setFont(fk);$('czFont').value=fk}}catch(e){}
+
+var tr=$('track'),n=3,cur=0,dots=document.querySelectorAll('.dots button'),tm,sx=null;
+function go(i){cur=(i+n)%n;tr.style.transform='translateX(-'+cur*100+'%)';dots.forEach(function(d,j){d.className=j===cur?'on':''})}
+function auto(){clearInterval(tm);if(!matchMedia('(prefers-reduced-motion:reduce)').matches)tm=setInterval(function(){go(cur+1)},5500)}
+$('prev').onclick=function(){go(cur-1);auto()};$('next').onclick=function(){go(cur+1);auto()};
+dots.forEach(function(d,j){d.onclick=function(){go(j);auto()}});
+$('slider').addEventListener('pointerdown',function(e){sx=e.clientX});
+$('slider').addEventListener('pointerup',function(e){if(sx!==null&&Math.abs(e.clientX-sx)>40){go(cur+(e.clientX<sx?1:-1));auto()}sx=null});
+go(0);auto();
+
+// Curtain cleanup
+var cu=document.querySelector('.curtain');
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){cu.remove()}else{cu.addEventListener('animationend',function(){cu.remove()},{once:true})}
+
+// Spotlight on cards
+document.addEventListener('pointermove',function(e){var c=e.target.closest&&e.target.closest('.card');if(!c)return;var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')});
+
+// Soundtrack player (file: assets/track.mp3)
+var a=$('aud'),p=$('player'),tn=$('tn');
+$('play').onclick=function(){if(a.paused){a.play().catch(function(){tn.textContent='No track yet'})}else{a.pause()}};
+a.onplay=function(){p.classList.add('playing');tn.textContent='Now playing';$('play').innerHTML='&#10074;&#10074;'};
+a.onpause=function(){p.classList.remove('playing');$('play').innerHTML='&#9654;'};
+a.onerror=function(){tn.textContent='No track yet'};
+
+if(location.search.indexOf('edit')>-1){
+$('cz').className='on';
+$('czToggle').onclick=function(){$('czbox').classList.toggle('open')};
+$('czColor').oninput=function(e){color(e.target.value);try{localStorage.setItem('azaya-accent',e.target.value)}catch(x){}};
+function pick(id,key,fn){$(id).onchange=function(e){var f=e.target.files[0];if(!f)return;put(key,f).then(function(){fn(f)}).catch(function(){alert('Could not save this file in your browser.')})}}
+[1,2,3].forEach(function(k){pick('czS'+k,'b'+k,function(f){var im=slideImgs[k-1];im.onerror=null;im.src=URL.createObjectURL(f);im.style.display=''})});
+pick('czAvatar','avatar',setAv);
+$('czFont').onchange=function(e){setFont(e.target.value);try{localStorage.setItem('azaya-font',e.target.value)}catch(x){}};
+$('czReset').onclick=function(){try{localStorage.removeItem('azaya-accent');localStorage.removeItem('azaya-font')}catch(x){}Promise.all(['b1','b2','b3','avatar'].map(function(k){return put(k,null)})).catch(function(){}).then(function(){location.reload()})};
+}
+})();
+</script>
+</body>
+</html>
